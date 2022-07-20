@@ -1,3 +1,4 @@
+from lightgbm import early_stopping
 import mlflow
 from sklearn.model_selection import train_test_split, cross_validate
 
@@ -91,6 +92,12 @@ class HoldoutTrainer(MedicalProjectTrainer):
             test_size=self.exp_params["val_size"],
             random_state=self.exp_params.get("train_test_split_seed", None),
         )
+
+        self.X_train = X_train
+        self.y_train = y_train
+        self.X_val = X_val
+        self.y_val = y_val
+
         model = self.train(X_train, y_train)
         if self.save_trained_model:
             save_model(
@@ -243,6 +250,14 @@ class RandomForestTrainer(HoldoutTrainer):
 
 
 class LightGBMTrainer(HoldoutTrainer):
+
+    def train(self, X_train, y_train):
+        model = self.model_class(**self.model_params)
+        model.fit(X_train, y_train, early_stopping_rounds=120,
+                  eval_metric="logloss", eval_set=[(self.X_val, self.y_val)])
+        print('best iteration:', model.best_iteration_)
+        return model
+
     def _after_training_hook(self, *args):
         model, X_val, y_val = args[0], args[3], args[4]
 

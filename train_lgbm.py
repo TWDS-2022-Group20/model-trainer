@@ -23,24 +23,25 @@ if __name__ == "__main__":
     exp_params = {
         "run_name": "LGBM",
         "model_type": LGBMClassifier.__name__,
-        "training_data": "./merged_data/brfss_combine_train_v2_important_20220708.csv",
-        "testing_data": "./merged_data/brfss_combine_test_v2_important_20220708.csv",
+        "training_data": "./merged_data/new_training_data_370K.csv",
+        "testing_data": "./merged_data/new_testing_data_30K.csv",
         "shuffle_seed": 42,
         "train_tests_split_seed": 42,
         "val_size": 0.1,
         "target": "ADDEPEV3",
-        "prob_threshold": 0.3,
+        "prob_threshold": 0.5,
         "model_dir": "./models/",
         "data_preparer": data_preparer_class.__name__,
     }
     model_params = {
-        "n_estimators": 120,
-        "n_jobs": -1,
-        "max_depth": 20,
+        "boosting_type": "gbdt",
         "objective": "binary",
-        "subsample": 0.8,
-        "num_leaves": 31,
+        "n_estimators": 200,
+        "max_depth": 30,
+        "num_leaves": 62,
+        "subsample": 1.0,
         "learning_rate": 0.1,
+        "reg_alpha": 0.0,
         "reg_lambda": 0.0,
     }
     print(exp_params)

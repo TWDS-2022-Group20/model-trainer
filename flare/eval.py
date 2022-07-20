@@ -3,6 +3,7 @@ import logging
 import matplotlib.pyplot as plt
 from sklearn.metrics import (
     accuracy_score,
+    confusion_matrix,
     recall_score,
     precision_score,
     roc_auc_score,
@@ -18,6 +19,7 @@ scoring_maps = {
     precision_score: "precision",
     roc_auc_score: "roc_auc",
     f1_score: "f1",
+
 }
 
 scoring_reverse_maps = {
@@ -49,6 +51,7 @@ class Evaluator:
 
     def eval_roc_auc_display(self, estimator, X, y, fig_path):
         RocCurveDisplay.from_estimator(estimator, X, y)
+        # plt.show()
         plt.savefig(fig_path)
         plt.close()
         if self.use_mlflow:
@@ -70,7 +73,8 @@ class Evaluator:
                     y, model.predict_proba(X)[:, 1]
                 )
             else:
-                scores[index_prefix + scoring_func_name] = scoring_func(y, y_pred)
+                scores[index_prefix +
+                       scoring_func_name] = scoring_func(y, y_pred)
         return scores
 
 

@@ -1,3 +1,6 @@
+from tkinter import W
+
+
 DEPENDENT_TARGETS = "ADDEPEV3"
 
 
@@ -33,7 +36,8 @@ class VaniilaLGBMPreprocessor(DataPreprocessor):
                 mode for preprocessing. If we set data_mode to "testing", the
                 Preprocessor will drop the target column from dataframe.
         """
-        self.drop_columns = ["Unnamed: 0"]
+        # self.drop_columns = ["Unnamed: 0"]
+        self.drop_columns = []
         self.data_mode = data_mode
 
         if data_mode == "testing":
