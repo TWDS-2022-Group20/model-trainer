@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import seaborn as sns
 import shap
 import numpy as np
 import mlflow
@@ -25,7 +24,8 @@ def plot_rf_importance(model, feature_names, n_features=25, use_mlflow=False):
         [feature_names_array, feature_importances], axis=1
     )
     feature_importances_cat.sort(axis=0)
-    plt.barh(feature_importances_cat[-25:, 0], feature_importances_cat[-25:, 1])
+    plt.barh(feature_importances_cat[-25:, 0],
+             feature_importances_cat[-25:, 1])
     plt.savefig("feature-importances.png")
     plt.close()
 
@@ -55,7 +55,7 @@ def plot_precision_recall_curve(model, X, y, filename=None, use_mlflow=False):
 def plot_shap_summary(model, X, filename, use_mlflow=False):
     explainer = shap.Explainer(model)
     shap_values = explainer.shap_values(X)
-    shap.summary_plot(shap_values, X)
+    shap.summary_plot(shap_values, X, show=False)
     plt.savefig(filename)
     plt.close()
     if use_mlflow:
