@@ -1,10 +1,6 @@
-import pandas as pd
-import lightgbm as lgb
 import mlflow
 from sklearn.model_selection import train_test_split, cross_validate
-import matplotlib.pyplot as plt
 
-from flare.preprocessing import split_features_target, preprocess_IDATE
 from flare.mlflow_utils import environment_setup
 from flare.eval import convert_cv_scores_to_logging_scores
 from flare.utils import save_model
@@ -41,7 +37,8 @@ class MedicalProjectTrainer(BaseTrainer):
         assert self.evaluator
         model_test = self.model_class(**self.model_params)
         model_test.fit(X_train, y_train)
-        scores = self.evaluator.evaluate(model_test, X_test, y_test, prefix="test-")
+        scores = self.evaluator.evaluate(
+            model_test, X_test, y_test, prefix="test-")
         self.evaluator.eval_roc_auc_display(
             model_test, X_test, y_test, fig_path="test-auc.png"
         )
@@ -104,12 +101,15 @@ class HoldoutTrainer(MedicalProjectTrainer):
                 use_mlflow=self.use_mlflow,
                 verbose=True,
             )
-        train_scores = self.evaluator.evaluate(model, X_train, y_train, prefix="train-")
+        train_scores = self.evaluator.evaluate(
+            model, X_train, y_train, prefix="train-")
         self.evaluator.eval_roc_auc_display(
             model, X_train, y_train, fig_path="train-auc.png"
         )
-        val_scores = self.evaluator.evaluate(model, X_val, y_val, prefix="val-")
-        self.evaluator.eval_roc_auc_display(model, X_val, y_val, fig_path="val-auc.png")
+        val_scores = self.evaluator.evaluate(
+            model, X_val, y_val, prefix="val-")
+        self.evaluator.eval_roc_auc_display(
+            model, X_val, y_val, fig_path="val-auc.png")
         scores = {}
         scores.update(train_scores)
         scores.update(val_scores)
