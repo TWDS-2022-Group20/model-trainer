@@ -253,7 +253,7 @@ class LightGBMTrainer(HoldoutTrainer):
 
     def train(self, X_train, y_train):
         model = self.model_class(**self.model_params)
-        model.fit(X_train, y_train, early_stopping_rounds=120,
+        model.fit(X_train, y_train, early_stopping_rounds=10,
                   eval_metric="logloss", eval_set=[(self.X_val, self.y_val)])
         print('best iteration:', model.best_iteration_)
         return model
